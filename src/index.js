@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/body.scss';
+import './styles/global.scss';
 
 // Components
 import Login from './components/Login';
