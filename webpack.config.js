@@ -66,4 +66,9 @@ module.exports = {
     }),
     extractSass,
   ],
+  devServer: {
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+    },
+  },
 };
