@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
 import 'react-table/react-table.css';
-import { requestCore } from '../../constants/utilities';
+import { requestOpsview } from '../../constants/utilities';
 
 class HostGroupsHostsAndServices extends Component {
   constructor(props) {
@@ -32,19 +32,14 @@ class HostGroupsHostsAndServices extends Component {
     this.setState({
       loading: true,
     });
-    console.log(state);
-    requestCore({
-      url: '/rest/status/hostgroup',
+
+    requestOpsview({
+      route: '/rest/status/hostgroup',
       query: {
         parentid: 1,
         order: 'dependency',
         page: state.page,
         rows: 'all' || state.pageSize,
-      },
-      headers: {
-        'content-type': 'application/json',
-        'x-opsview-token': localStorage.getItem('opsview_token'),
-        'x-opsview-username': localStorage.getItem('opsview_username'),
       },
       done: ({ summary, list }) => this.setState({
         hostgroups: {

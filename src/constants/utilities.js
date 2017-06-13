@@ -1,10 +1,15 @@
 import qs from 'qs';
 
-export function isLoggedIn() {
-  const opsviewToken = localStorage.getItem('opsview_token');
-  const opsviewUsername = localStorage.getItem('opsview_username');
+export function getCredentials() {
+  return {
+    username: localStorage.getItem('opsview_token'),
+    token: localStorage.getItem('opsview_username'),
+  };
+}
 
-  return opsviewToken && opsviewUsername;
+export function isLoggedIn() {
+  const { username, token } = getCredentials();
+  return username && token;
 }
 
 export function decodeJSON(jsonString) {
@@ -25,6 +30,10 @@ export function requestCore({
   fail = () => {},
   always = () => {},
 }) {
+  if (!url) {
+    throw new Error('requestCore needs a URL');
+  }
+
   const xhr = new XMLHttpRequest();
 
   xhr.open(method, `${url}?${qs.stringify(query)}`, true);
@@ -64,4 +73,57 @@ export function requestCore({
   return xhr;
 }
 
-export function requestOpsview() {}
+export function login({ username = '', password = '', callback = () => {} }) {
+  requestCore({
+    method: 'POST',
+    url: '/rest/login',
+    body: JSON.stringify({
+      username,
+      password,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    done: ({ token }) => {
+      localStorage.setItem('opsview_username', username);
+      localStorage.setItem('opsview_token', token);
+      callback(false);
+    },
+    fail: response => callback(response),
+  });
+}
+
+export function requestOpsview(options) {
+  const { username, token } = getCredentials();
+  // Hardcoded url
+  const opsviewUrl = '';
+
+  requestCore({
+    ...options,
+    url: `${opsviewUrl}${options.route}`,
+    headers: {
+      'content-type': 'application/json',
+      'x-opsview-token': token,
+      'x-opsview-username': username,
+      ...options.headers,
+    },
+    fail: (response) => {
+      if (
+        response.message === 'Token invalid' ||
+        response.message === 'Token has expired'
+      ) {
+        // If the token is not working then we log the user out
+        localStorage.clear();
+        window.location.reload();
+      } else {
+        if (options.always) {
+          options.always(response);
+        }
+
+        if (options.fail) {
+          options.fail(response);
+        }
+      }
+    },
+  });
+}

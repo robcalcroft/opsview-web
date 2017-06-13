@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { requestCore } from '../../constants/utilities';
+import { login } from '../../constants/utilities';
 
 class Login extends Component {
   constructor(props) {
@@ -21,26 +21,12 @@ class Login extends Component {
 
     const { username, password } = this.state;
 
-    requestCore({
-      method: 'POST',
-      url: '/rest/login',
-      body: JSON.stringify({
-        username,
-        password,
+    login({
+      username,
+      password,
+      callback: () => this.setState({
+        loginSuccess: true,
       }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      done: ({ token }) => {
-        localStorage.setItem('opsview_username', username);
-        localStorage.setItem('opsview_token', token);
-        this.setState({
-          loginSuccess: true,
-        });
-      },
-      fail: (response) => {
-        console.log('failed', response);
-      },
     });
   }
 
