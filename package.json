@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "prop-types": "^15.5.10",
+    "qs": "^6.4.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-router-dom": "^4.1.1"
+    "react-router-dom": "^4.1.1",
+    "react-table": "^6.3.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",

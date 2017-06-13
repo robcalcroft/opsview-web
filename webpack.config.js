@@ -5,7 +5,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Create a CSS file in production but inlines the styles in development
-const extractSass = new ExtractTextPlugin({
+const extractSassAndCss = new ExtractTextPlugin({
   filename: '[name].[contenthash].css',
   disable: !isProduction,
 });
@@ -34,7 +34,7 @@ module.exports = {
       test: /\.scss$/,
       // Use our defined plugin to load the SASS through the css loader which
       // sorts out CSS Modules and minimising
-      use: extractSass.extract({
+      use: extractSassAndCss.extract({
         use: [{
           loader: 'css-loader',
           options: {
@@ -51,6 +51,13 @@ module.exports = {
         // #progressivewebapp
         fallback: 'style-loader',
       }),
+    }, {
+      test: /\.css$/,
+      // Pull the CSS out for plain old CSS and stick it in a file
+      use: extractSassAndCss.extract({
+        use: ['css-loader'],
+        fallback: 'style-loader',
+      }),
     }],
   },
   // The sourcemap helps us debug in production by creating a file that we can
@@ -64,11 +71,13 @@ module.exports = {
       template: './src/index.ejs',
       title: 'Opsview Web',
     }),
-    extractSass,
+    extractSassAndCss,
   ],
   devServer: {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
+    proxy: {
+      '/rest': {
+        target: 'http://52.17.132.7',
+      },
     },
   },
 };

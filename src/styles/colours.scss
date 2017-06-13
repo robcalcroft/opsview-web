@@ -1,0 +1,18 @@
+$opsview-brand-colour: rgb(62,33,85);
+$opsview-light-grey: rgb(245,248,250);
+
+.opsview-brand-colour-background {
+  background-color: $opsview-brand-colour;
+}
+
+.opsview-brand-colour-text {
+  color: $opsview-brand-colour;
+}
+
+.opsview-light-grey-background {
+  background-color: $opsview-light-grey;
+}
+
+.opsview-light-grey-text {
+  color: $opsview-light-grey;
+}
