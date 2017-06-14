@@ -3,7 +3,7 @@ import { HashRouter as Router, Route as PublicRoute, Redirect } from 'react-rout
 import { isLoggedIn } from '../../constants/utilities';
 import ProtectedRoute from '../ProtectedRoute';
 import Container from '../Container';
-import HostGroupsHostsAndServices from '../HostGroupsHostsAndServices';
+import Hosts from '../Hosts';
 import Login from '../Login';
 
 const defaultRoute = '/hosts';
@@ -11,9 +11,9 @@ const defaultRoute = '/hosts';
 export default () => (
   <Router>
     <Container>
-      <Redirect from="/" exact to={isLoggedIn() ? defaultRoute : '/login'} />
+      <Redirect from="/" to={isLoggedIn() ? defaultRoute : '/login'} />
       <PublicRoute path="/login" component={Login} />
-      <ProtectedRoute path="/hosts" component={HostGroupsHostsAndServices} />
+      <ProtectedRoute path="/hosts" component={Hosts} />
     </Container>
   </Router>
 );

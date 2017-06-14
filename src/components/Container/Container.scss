@@ -1,4 +1,50 @@
+@import "../../styles/colours.scss";
+
 .container {
   height: 100%;
   width: 100%;
+  background-color: $opsview-light-grey;
+}
+
+.childrenWrapper {
+  padding: 1rem;
+}
+
+.navBar {
+  height: 7.5vh;
+  background-color: $opsview-brand-colour;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  justify-content: space-between;
+}
+
+.navBar__title {
+  color: white;
+  font-size: 30px;
+}
+
+.navBar__links {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  @extend .navBar__title;
+}
+
+.navBar__links:last-child {
+  padding-left: 0.75rem;
+  padding-right: 0rem;
+}
+
+.navBar__link {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+  &:visited {
+    color: inherit;
+  }
+  &:active {
+    opacity: 0.5;
+  }
 }

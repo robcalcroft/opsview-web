@@ -2,8 +2,8 @@ import qs from 'qs';
 
 export function getCredentials() {
   return {
-    username: localStorage.getItem('opsview_token'),
-    token: localStorage.getItem('opsview_username'),
+    username: localStorage.getItem('opsview_username'),
+    token: localStorage.getItem('opsview_token'),
   };
 }
 
@@ -16,7 +16,7 @@ export function decodeJSON(jsonString) {
   try {
     return JSON.parse(jsonString);
   } catch (error) {
-    return 'Could not decode response';
+    return jsonString;
   }
 }
 
@@ -93,6 +93,11 @@ export function login({ username = '', password = '', callback = () => {} }) {
   });
 }
 
+export function logout() {
+  localStorage.clear();
+  window.location.reload();
+}
+
 export function requestOpsview(options) {
   const { username, token } = getCredentials();
   // Hardcoded url
@@ -126,4 +131,17 @@ export function requestOpsview(options) {
       }
     },
   });
+}
+
+export function getStateColour(state) {
+  const colours = {
+    critical: 'red',
+    down: 'red',
+    ok: 'green',
+    up: 'green',
+    warning: 'yellow',
+    unknown: 'purple',
+    unreachable: 'purple',
+  };
+  return colours[state];
 }
