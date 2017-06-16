@@ -1,18 +1,32 @@
-$opsview-brand-colour: rgb(62,33,85);
-$opsview-light-grey: rgb(245,248,250);
+$opsview-brand-colour: rgb(62,35,83);
+$opsview-very-light-grey: rgb(245,248,250);
+$opsview-light-grey: darken(rgb(246,247,248), 5%);
+$opsview-blue: rgb(3,102,215);
+$opsview-green: rgb(39,155,93);
+$opsview-amber: rgb(240,177,60);
+$opsview-red: rgb(201,1,66);
+$opsview-light-purple: rgb(194,154,206);
+$opsview-greyed-purple: #9d92a9;
 
-.opsview-brand-colour-background {
-  background-color: $opsview-brand-colour;
-}
+// Alias'
+$opsview-critical: $opsview-red;
+$opsview-down: $opsview-red;
+$opsview-ok: $opsview-green;
+$opsview-up: $opsview-green;
+$opsview-warning: $opsview-amber;
+$opsview-unreachable: $opsview-light-purple;
+$opsview-unknown: $opsview-light-purple;
 
-.opsview-brand-colour-text {
-  color: $opsview-brand-colour;
-}
+/* Backgrounds */
+.unhandled { background-color: $opsview-red }
+.handled { background-color: $opsview-green }
+.critical { background-color: $opsview-critical }
+.down { background-color: $opsview-down }
+.ok { background-color: $opsview-ok }
+.up { background-color: $opsview-up }
+.warning { background-color: $opsview-warning }
+.unreachable { background-color: $opsview-unreachable }
+.unknown { background-color: $opsview-unknown }
 
-.opsview-light-grey-background {
-  background-color: $opsview-light-grey;
-}
-
-.opsview-light-grey-text {
-  color: $opsview-light-grey;
-}
+/* Text */
+.whiteText { color: white }

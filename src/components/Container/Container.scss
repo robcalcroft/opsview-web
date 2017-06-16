@@ -3,7 +3,7 @@
 .container {
   height: 100%;
   width: 100%;
-  background-color: $opsview-light-grey;
+  background-color: $opsview-very-light-grey;
 }
 
 .childrenWrapper {
@@ -11,7 +11,7 @@
 }
 
 .navBar {
-  height: 7.5vh;
+  height: 75px;
   background-color: $opsview-brand-colour;
   display: flex;
   align-items: center;
@@ -20,15 +20,16 @@
   justify-content: space-between;
 }
 
-.navBar__title {
-  color: white;
-  font-size: 30px;
+.navBar__img {
+  width: auto;
+  height: 5rem;
 }
 
 .navBar__links {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
-  @extend .navBar__title;
+  color: white;
+  font-size: 150%;
 }
 
 .navBar__links:last-child {

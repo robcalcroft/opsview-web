@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import styles from './Container.scss';
 import { logout } from '../../constants/utilities';
 
+const logo = require('../../assets/logo-white.png');
+
 const Container = ({ children }) => (
   <div className={styles.container}>
     <div className={styles.navBar}>
-      <div className={styles.navBar__title}>Opsview</div>
+      <img className={styles.navBar__img} src={logo} alt="Opsview's Logo" />
       <div className={styles.navBar__links}>
         <a href="/" className={styles.navBar__link} onClick={logout}>Logout</a>
       </div>

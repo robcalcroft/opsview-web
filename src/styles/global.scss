@@ -1,8 +1,23 @@
 @import "reset";
+@import "colours";
 
 body {
   height: 100vh;
   width: 100vw;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   font-size: 1.25rem;
+}
+
+/* Links */
+a {
+  color: inherit;
+  text-decoration: none;
+  &:hover {
+    color: $opsview-blue;
+  }
+}
+
+/* Bold text */
+b {
+  font-weight: bold;
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { login } from '../../constants/utilities';
+import { DEFAULT_ROUTE } from '../../constants/globals';
 
 class Login extends Component {
   constructor(props) {
@@ -24,9 +25,15 @@ class Login extends Component {
     login({
       username,
       password,
-      callback: () => this.setState({
-        loginSuccess: true,
-      }),
+      callback: (error) => {
+        if (!error) {
+          this.setState({
+            loginSuccess: true,
+          });
+        } else {
+          alert(error.message);
+        }
+      },
     });
   }
 
@@ -41,7 +48,6 @@ class Login extends Component {
 
     return !loginSuccess ? (
       <div>
-        <div>OPSVIEW</div>
         <form onSubmit={this.submitLogin}>
           <input onChange={this.fieldChange} name="username" />
           <input onChange={this.fieldChange} name="password" type="password" />
@@ -49,7 +55,7 @@ class Login extends Component {
         </form>
       </div>
     ) : (
-      <Redirect to="/hosts" />
+      <Redirect to={DEFAULT_ROUTE} />
     );
   }
 }

@@ -39,6 +39,7 @@ module.exports = {
           loader: 'css-loader',
           options: {
             modules: true,
+            localIdentName: '[name]__[local]--[hash:base64:5]',
             minimize: true,
           },
         }, {
@@ -58,6 +59,17 @@ module.exports = {
         use: ['css-loader'],
         fallback: 'style-loader',
       }),
+    }, {
+      // Bring all our file content
+      test: /\.(png|jpg|jpeg|svg|gif)/,
+      use: [{
+        loader: 'url-loader',
+        options: {
+          // Ensure only files smaller than ~4mb are turned into data urls and others are handled as
+          // normal files
+          limit: 4096,
+        },
+      }],
     }],
   },
   // The sourcemap helps us debug in production by creating a file that we can

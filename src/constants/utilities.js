@@ -16,7 +16,9 @@ export function decodeJSON(jsonString) {
   try {
     return JSON.parse(jsonString);
   } catch (error) {
-    return jsonString;
+    return {
+      message: jsonString,
+    };
   }
 }
 
@@ -103,7 +105,7 @@ export function requestOpsview(options) {
   // Hardcoded url
   const opsviewUrl = '';
 
-  requestCore({
+  return requestCore({
     ...options,
     url: `${opsviewUrl}${options.route}`,
     headers: {
