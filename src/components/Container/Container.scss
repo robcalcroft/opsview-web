@@ -8,6 +8,8 @@
 
 .childrenWrapper {
   padding: 1rem;
+  // Full height, minus height of navbar, minus padding top and bottom
+  height: calc(100% - 75px - 2rem);
 }
 
 .navBar {
@@ -29,7 +31,7 @@
   padding-left: 0.75rem;
   padding-right: 0.75rem;
   color: white;
-  font-size: 150%;
+  font-size: 125%;
 }
 
 .navBar__links:last-child {

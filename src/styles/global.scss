@@ -21,3 +21,11 @@ a {
 b {
   font-weight: bold;
 }
+
+/* Inputs */
+input, textarea {
+  font-size: 100%;
+  &:focus {
+    outline: 3px solid $opsview-amber;
+  }
+}

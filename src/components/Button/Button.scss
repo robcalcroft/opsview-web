@@ -1,0 +1,15 @@
+@import "../../styles/colours";
+
+.button {
+  border: 0;
+  padding: 1rem;
+  font-size: 100%;
+  background-color: $opsview-blue;
+  color: white;
+  &:active {
+    background-color: darken($opsview-blue, 10%);
+  }
+  &:active, &:focus {
+    outline: 3px solid $opsview-amber;
+  }
+}

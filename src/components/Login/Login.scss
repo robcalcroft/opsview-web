@@ -1,1 +1,39 @@
+@import "../../styles/colours";
+$margin: 0.5rem;
 
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75%;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+}
+
+.title {
+  font-size: 135%;
+  text-align: center;
+}
+
+.field {
+  border: 0;
+  padding: 1rem;
+  border: 2px solid $opsview-light-grey;
+}
+
+.loginForm > * {
+  margin-top: $margin;
+  margin-bottom: $margin;
+  &:last-child {
+    margin-top: $margin;
+    margin-bottom: 0rem;
+  }
+  &:first-child {
+    margin-bottom: $margin;
+    margin-top: 0rem;
+  }
+}
