@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { requestOpsview } from '../../constants/utilities';
 import Pill from '../Pill';
+import Button from '../Button';
 import styles from './HostGroups.scss';
 
 class HostGroups extends Component {
@@ -11,6 +12,7 @@ class HostGroups extends Component {
 
     this.getHostGroups = this.getHostGroups.bind(this);
     this.startClearOldRequestsInterval = this.startClearOldRequestsInterval.bind(this);
+    this.refreshHostGroups = this.refreshHostGroups.bind(this);
     this.renderHostGroup = this.renderHostGroup.bind(this);
 
     this.requests = [];
@@ -24,6 +26,22 @@ class HostGroups extends Component {
   componentDidMount() {
     this.getHostGroups(this.getParentId());
     this.startClearOldRequestsInterval();
+  }
+
+  // React router doesn't remount when only parameters change in the route. So we listen to when the
+  // props change
+  componentWillReceiveProps(nextProps) {
+    // Only run when the params has changed
+    const { parentId: currentParentId } = this.props.match.params;
+    const { parentId: newParentId } = nextProps.match.params;
+
+    // This simulates the component being remounted
+    if (currentParentId !== newParentId) {
+      this.setState({
+        data: [],
+        loading: true,
+      }, this.componentDidMount);
+    }
   }
 
   componentWillUnmount() {
@@ -75,6 +93,10 @@ class HostGroups extends Component {
     return hostsUnhandled !== 0 || servicesUnhandled !== 0;
   }
 
+  refreshHostGroups() {
+    this.getHostGroups(this.getParentId());
+  }
+
   renderHostGroup({ // eslint-disable-line class-methods-use-this
     leaf,
     name,
@@ -119,12 +141,15 @@ class HostGroups extends Component {
 
     return (
       <div data-component-name="HostGroups">
+        <Button onClick={this.refreshHostGroups}>Refresh</Button>
         {loading ? <div>Loading</div> : data.map(this.renderHostGroup)}
       </div>
     );
   }
 }
 
+// TODO: Refactor this prop logic into a `screen` component so that this component only recieves
+// one `parentId` prop
 HostGroups.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({

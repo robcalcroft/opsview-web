@@ -4,6 +4,10 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // Decide if we're in production
 const isProduction = process.env.NODE_ENV === 'production';
 
+if (!process.env.OPSVIEW_URL) {
+  throw new Error('No Opsview URL given, use `OPSVIEW_URL=XX yarn development`');
+}
+
 // Create a CSS file in production but inlines the styles in development
 const extractSassAndCss = new ExtractTextPlugin({
   filename: '[name].[contenthash].css',
@@ -88,7 +92,7 @@ module.exports = {
   devServer: {
     proxy: {
       '/rest': {
-        target: 'http://52.17.132.7',
+        target: process.env.OPSVIEW_URL,
       },
     },
   },
