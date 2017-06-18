@@ -1,7 +1,7 @@
 @import "../../styles/colours";
 
 $margin: 1rem;
-$padding: 1rem;
+$padding: 0.75rem;
 
 .hostgroup {
   display: flex;
@@ -28,10 +28,40 @@ $padding: 1rem;
   }
 }
 
+.hostgroup__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .hostgroup__title div {
   margin-bottom: 0.5rem;
 }
 
 .hostgroup__title b {
-  font-size: 125%;
+  font-size: 115%;
+}
+
+.hostgroup__dialLabel {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  padding-left: $padding;
+  padding-right: 0.1rem;
+}
+
+.hostgroup__highlights {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 250px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.hostgroup__highlights span {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

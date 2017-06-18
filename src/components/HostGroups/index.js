@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { requestOpsview } from '../../constants/utilities';
 import Pill from '../Pill';
+import Loader from '../Loader';
 import Button from '../Button';
+import Dial from '../Dial';
 import styles from './HostGroups.scss';
+import colours from '../../styles/colours.scss';
 
 class HostGroups extends Component {
   constructor(props) {
@@ -80,6 +83,64 @@ class HostGroups extends Component {
     this.requests.push(request);
   }
 
+  getDialProps(counts) { // eslint-disable-line class-methods-use-this
+    const { total, up, ok, down, critical, warning, unreachable, unknown } = counts;
+    const props = { total };
+
+    if (up) { props.green = Number(up.unhandled || 0) + Number(up.handled || 0); }
+    if (ok) { props.green = Number(ok.unhandled || 0) + Number(ok.handled || 0); }
+    if (down) { props.red = Number(down.unhandled || 0) + Number(down.handled || 0); }
+    if (critical) { props.red = Number(critical.unhandled || 0) + Number(critical.handled || 0); }
+    if (warning) { props.yellow = Number(warning.unhandled || 0) + Number(warning.handled || 0); }
+    if (unreachable) {
+      props.purple = Number(unreachable.unhandled || 0) + Number(unreachable.handled || 0);
+    }
+    if (unknown) { props.purple = Number(unknown.unhandled || 0) + Number(unknown.handled || 0); }
+
+    return props;
+  }
+
+  getTagLine(counts, suffix) { // eslint-disable-line class-methods-use-this
+    // The suffix should not be plural
+    const states = {
+      up: counts.up,
+      ok: counts.ok,
+      critical: counts.critical,
+      down: counts.down,
+      warning: counts.warning,
+      unreachable: counts.unreachable,
+      unknown: counts.unknown,
+    };
+    const itemOfInterest = Object.keys(states).reduce((previous, current) => {
+      if (states[current] && states[current].unhandled) {
+        const unhandledCount = Number(states[current].unhandled);
+        const previousHighestUnhandledCount = previous[0];
+
+        if (unhandledCount > previousHighestUnhandledCount) {
+          return [unhandledCount, current];
+        }
+        return previous;
+      }
+      return previous;
+    }, [0, '']);
+
+    if (itemOfInterest[0] === 0 || itemOfInterest[1] === '') {
+      return {
+        raw: `All ${suffix}s handled`,
+        jsx: `All ${suffix}s handled`,
+      };
+    }
+
+    return {
+      raw: `There ${itemOfInterest[0] === 1 ? 'is' : 'are'} ${itemOfInterest[0]} ${itemOfInterest[1]} ${suffix}${itemOfInterest[0] === 1 ? '' : 's'}`,
+      jsx: (
+        <span className={colours[`${itemOfInterest[1]}Text`]}>
+          <b>There {itemOfInterest[0] === 1 ? 'is' : 'are'} {itemOfInterest[0]} {itemOfInterest[1]} {suffix}{itemOfInterest[0] === 1 ? '' : 's'}</b>
+        </span>
+      ),
+    };
+  }
+
   startClearOldRequestsInterval() {
     this.clearOldRequestsInterval = setInterval(() => {
       this.requests = [];
@@ -112,6 +173,8 @@ class HostGroups extends Component {
       }
       return true;
     };
+    const hostsTagLine = this.getTagLine(hosts, 'host');
+    const servicesTagLine = this.getTagLine(services, 'service');
 
     return (
       <Link
@@ -124,7 +187,15 @@ class HostGroups extends Component {
           <div>Name</div>
           <b>{name}</b>
         </div>
-        <div style={{ display: 'flex', columnDirection: 'row' }}>
+        <div style={{ display: 'flex' }}>
+          <div className={styles.hostgroup__dialLabel}>Hosts</div>
+          <Dial {...this.getDialProps(hosts)} fillColour="#e8eaed" />
+          <div className={styles.hostgroup__dialLabel}>Services</div>
+          <Dial {...this.getDialProps(services)} fillColour="#e8eaed" />
+          <div className={styles.hostgroup__highlights}>
+            <span title={hostsTagLine.raw}>{hostsTagLine.jsx}</span>
+            <span title={servicesTagLine.raw}>{servicesTagLine.jsx}</span>
+          </div>
           <Pill state={state} />
           {this.isUnhandledHostGroup(hosts, services) ? (
             <Pill state="unhandled" />
@@ -140,9 +211,12 @@ class HostGroups extends Component {
     const { data, loading } = this.state;
 
     return (
-      <div data-component-name="HostGroups">
-        <Button onClick={this.refreshHostGroups}>Refresh</Button>
-        {loading ? <div>Loading</div> : data.map(this.renderHostGroup)}
+      <div data-component-name="HostGroups" style={{ height: '100%' }}>
+        <div className={styles.hostgroup__header}>
+          <b style={{ fontSize: '150%' }}>Hostgroups</b>
+          <Button onClick={this.refreshHostGroups}>Refresh</Button>
+        </div>
+        {loading ? <Loader /> : data.map(this.renderHostGroup)}
       </div>
     );
   }

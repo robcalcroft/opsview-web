@@ -1,6 +1,6 @@
 $opsview-brand-colour: rgb(62,35,83);
 $opsview-very-light-grey: rgb(245,248,250);
-$opsview-light-grey: darken(rgb(246,247,248), 5%);
+$opsview-light-grey: #e8eaed;
 $opsview-blue: rgb(3,102,215);
 $opsview-green: rgb(39,155,93);
 $opsview-amber: rgb(240,177,60);
@@ -30,3 +30,12 @@ $opsview-unknown: $opsview-light-purple;
 
 /* Text */
 .whiteText { color: white }
+.unhandledText { color: $opsview-red }
+.handledText { color: $opsview-green }
+.criticalText { color: $opsview-critical }
+.downText { color: $opsview-down }
+.okText { color: $opsview-ok }
+.upText { color: $opsview-up }
+.warningText { color: $opsview-warning }
+.unreachableText { color: $opsview-unreachable }
+.unknownText { color: $opsview-unknown }
