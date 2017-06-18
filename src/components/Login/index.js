@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import { login } from '../../constants/utilities';
+import qs from 'qs';
+import { login, addQueryParameter } from '../../constants/utilities';
 import { DEFAULT_ROUTE } from '../../constants/globals';
 import Button from '../Button';
 import styles from './Login.scss';
@@ -33,7 +35,9 @@ class Login extends Component {
             loginSuccess: true,
           });
         } else {
-          alert(error.message);
+          addQueryParameter(this.props.location.search, {
+            error: error.message,
+          });
         }
       },
     });
@@ -47,11 +51,17 @@ class Login extends Component {
 
   render() {
     const { loginSuccess } = this.state;
+    const { message, error } = qs.parse(
+      this.props.location.search.replace(/^\?/, ''),
+      { ignoreQueryPrefix: true },
+    );
 
     return !loginSuccess ? (
       <div className={styles.container}>
         <form className={styles.loginForm} onSubmit={this.submitLogin}>
-          <b className={styles.title}>Log into Opsview Monitor</b>
+          <b className={styles.title}>Log in to Opsview Monitor</b>
+          {message && <div className={styles.message}>{decodeURIComponent(message)}</div>}
+          {error && <div className={`${styles.message} ${styles['message--error']}`}>{decodeURIComponent(error)}</div>}
           <input
             placeholder="Username"
             className={styles.field}
@@ -77,5 +87,11 @@ class Login extends Component {
     );
   }
 }
+
+Login.propTypes = {
+  location: PropTypes.shape({
+    search: PropTypes.string,
+  }).isRequired,
+};
 
 export default Login;

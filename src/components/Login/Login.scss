@@ -37,3 +37,16 @@ $margin: 0.5rem;
     margin-top: 0rem;
   }
 }
+
+.message {
+  text-align: center;
+  background-color: rgba($opsview-blue, 0.2);
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  color: $opsview-blue;
+}
+
+.message--error {
+  background-color: rgba($opsview-red, 0.2);
+  color: $opsview-red;
+}

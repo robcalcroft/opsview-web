@@ -230,9 +230,6 @@ HostGroups.propTypes = {
       parentId: PropTypes.string,
     }).isRequired,
   }).isRequired,
-  // location: PropTypes.shape({
-  //   search: PropTypes.string,
-  // }).isRequired,
 };
 
 export default HostGroups;

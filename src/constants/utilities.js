@@ -147,3 +147,33 @@ export function getStateColour(state) {
   };
   return colours[state];
 }
+
+export function addQueryParameter(queryString = '', newQueryParameter = {}) {
+  const hash = window.location.hash;
+  const query = qs.parse(queryString.replace(/^\?/, ''), { ignoreQueryPrefix: true });
+  const newQuery = {
+    ...query,
+    ...newQueryParameter,
+  };
+  let newHash = hash.replace(queryString, '');
+  newHash = newHash.replace(/^\?/, '');
+  newHash += `?${qs.stringify(newQuery)}`;
+
+  window.location.hash = newHash;
+}
+
+export function removeQueryParameter(queryString, paramToRemove) {
+  const hash = window.location.hash;
+  const query = qs.parse(queryString.replace(/^\?/, ''), { ignoreQueryPrefix: true });
+  if (typeof paramToRemove === 'string') {
+    delete query[paramToRemove];
+  } else {
+    paramToRemove.forEach(param => delete query[param]);
+  }
+
+  let newHash = hash.replace(queryString, '');
+  newHash = newHash.replace(/^\?/, '');
+  newHash += `?${qs.stringify(query)}`;
+
+  window.location.hash = newHash;
+}
