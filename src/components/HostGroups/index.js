@@ -6,6 +6,7 @@ import Pill from '../Pill';
 import Loader from '../Loader';
 import Button from '../Button';
 import Dial from '../Dial';
+import Row from '../Row';
 import styles from './HostGroups.scss';
 import colours from '../../styles/colours.scss';
 
@@ -58,7 +59,7 @@ class HostGroups extends Component {
     };
   }
 
-  getHostGroups(overrideQuery = {}) {
+  getHostGroups(query = {}) {
     const { loading: isCurrentlyLoading } = this.state;
 
     if (!isCurrentlyLoading) {
@@ -71,7 +72,7 @@ class HostGroups extends Component {
       route: '/rest/status/hostgroup',
       query: {
         order: 'dependency',
-        ...overrideQuery,
+        ...query,
       },
       done: ({ list }) => this.setState({
         data: list,
@@ -166,43 +167,36 @@ class HostGroups extends Component {
     hosts,
     services,
   }) {
-    const isLeaf = (event) => {
-      if (leaf === '1') {
-        event.preventDefault();
-        alert('This is a leaf');
-      }
-      return true;
-    };
     const hostsTagLine = this.getTagLine(hosts, 'host');
     const servicesTagLine = this.getTagLine(services, 'service');
 
     return (
       <Link
-        className={styles.hostgroup}
-        onClick={isLeaf}
-        to={`/hostgroup/${hostGroupId}`}
+        to={`/${leaf === '1' ? 'host' : 'hostgroup'}/${hostGroupId}`}
         key={hostGroupId}
       >
-        <div className={styles.hostgroup__title}>
-          <div>Name</div>
-          <b>{name}</b>
-        </div>
-        <div style={{ display: 'flex' }}>
-          <div className={styles.hostgroup__dialLabel}>Hosts</div>
-          <Dial {...this.getDialProps(hosts)} fillColour="#e8eaed" />
-          <div className={styles.hostgroup__dialLabel}>Services</div>
-          <Dial {...this.getDialProps(services)} fillColour="#e8eaed" />
-          <div className={styles.hostgroup__highlights}>
-            <span title={hostsTagLine.raw}>{hostsTagLine.jsx}</span>
-            <span title={servicesTagLine.raw}>{servicesTagLine.jsx}</span>
+        <Row>
+          <div className={styles.hostgroup__title}>
+            <div>Name</div>
+            <b>{name}</b>
           </div>
-          <Pill state={state} />
-          {this.isUnhandledHostGroup(hosts, services) ? (
-            <Pill state="unhandled" />
-          ) : (
-            <Pill state="handled" />
-          )}
-        </div>
+          <div style={{ display: 'flex' }}>
+            <div className={styles.hostgroup__dialLabel}>Hosts</div>
+            <Dial {...this.getDialProps(hosts)} fillColour="#e8eaed" />
+            <div className={styles.hostgroup__dialLabel}>Services</div>
+            <Dial {...this.getDialProps(services)} fillColour="#e8eaed" />
+            <div className={styles.hostgroup__highlights}>
+              <span title={hostsTagLine.raw}>{hostsTagLine.jsx}</span>
+              <span title={servicesTagLine.raw}>{servicesTagLine.jsx}</span>
+            </div>
+            <Pill state={state} />
+            {this.isUnhandledHostGroup(hosts, services) ? (
+              <Pill state="unhandled" />
+            ) : (
+              <Pill state="handled" />
+            )}
+          </div>
+        </Row>
       </Link>
     );
   }

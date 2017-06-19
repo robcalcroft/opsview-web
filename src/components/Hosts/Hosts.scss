@@ -1,0 +1,13 @@
+.host__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.host__title div {
+  margin-bottom: 0.5rem;
+}
+
+.host__title b {
+  font-size: 115%;
+}
