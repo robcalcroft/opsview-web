@@ -4,18 +4,18 @@ import { Link } from 'react-router-dom';
 import Loader from '../Loader';
 import Row from '../Row';
 import ListHeader from '../ListHeader';
-import styles from './Hosts.scss';
+import styles from './Services.scss';
 import { requestOpsview } from '../../constants/utilities';
 
-class Hosts extends Component {
+class Services extends Component {
   constructor(props) {
     super(props);
 
-    this.getHostGroupId = this.getHostGroupId.bind(this);
-    this.getHosts = this.getHosts.bind(this);
+    this.getServiceGroupId = this.getServiceGroupId.bind(this);
+    this.getServices = this.getServices.bind(this);
     this.startClearOldRequestsInterval = this.startClearOldRequestsInterval.bind(this);
-    this.refreshHosts = this.refreshHosts.bind(this);
-    this.renderHost = this.renderHost.bind(this);
+    this.refreshServices = this.refreshServices.bind(this);
+    this.renderService = this.renderService.bind(this);
 
     this.requests = [];
 
@@ -26,7 +26,7 @@ class Hosts extends Component {
   }
 
   componentDidMount() {
-    this.getHosts(this.getHostGroupId());
+    this.getServices(this.getServiceGroupId());
     this.startClearOldRequestsInterval();
   }
 
@@ -35,13 +35,13 @@ class Hosts extends Component {
     this.requests.forEach(request => request.abort && request.abort());
   }
 
-  getHostGroupId() {
+  getServiceGroupId() {
     return {
-      hostgroupid: this.props.match.params.hostGroupId,
+      hostname: this.props.match.params.hostname,
     };
   }
 
-  getHosts(query = {}) {
+  getServices(query = {}) {
     const { loading: isCurrentlyLoading } = this.state;
 
     if (!isCurrentlyLoading) {
@@ -51,12 +51,21 @@ class Hosts extends Component {
     }
 
     const request = requestOpsview({
-      route: '/rest/status/host',
+      route: '/rest/status/service',
       query,
-      done: ({ list }) => this.setState({
-        data: list,
-        loading: false,
-      }),
+      done: ({ list }) => {
+        const services = [];
+        for (let i = 0; i < list.length; i += 1) {
+          const { services: extractedServices } = list[i];
+          for (let j = 0; j < extractedServices.length; j += 1) {
+            services.push(extractedServices[j]);
+          }
+        }
+        this.setState({
+          data: services,
+          loading: false,
+        });
+      },
       fail: response => console.log(response),
     });
 
@@ -69,15 +78,15 @@ class Hosts extends Component {
     }, 20000);
   }
 
-  refreshHosts() {
-    this.getHosts(this.getHostGroupId());
+  refreshServices() {
+    this.getServices(this.getServiceGroupId());
   }
 
-  renderHost(row) { // eslint-disable-line class-methods-use-this
+  renderService(row) { // eslint-disable-line class-methods-use-this
     return (
-      <Link key={btoa(row.name)} to={`/service/${row.name}`}>
+      <Link key={btoa(row.name)} to={`/investigate/${row.name}`}>
         <Row>
-          <div className={styles.host__title}>
+          <div className={styles.service__title}>
             <div>Name</div>
             <b>{row.name}</b>
           </div>
@@ -90,26 +99,26 @@ class Hosts extends Component {
     const { data, loading } = this.state;
 
     return (
-      <div data-component-name="Host" style={{ height: '100%' }}>
+      <div data-component-name="Service" style={{ height: '100%' }}>
         <ListHeader
-          title="Hostgroups > Hosts"
+          title="Hostgroups > Hosts > Services"
           buttons={[{
             label: 'Refresh',
-            props: { onClick: this.refreshHosts },
+            props: { onClick: this.refreshServices },
           }]}
         />
-        {loading ? <Loader /> : data.map(this.renderHost)}
+        {loading ? <Loader /> : data.map(this.renderService)}
       </div>
     );
   }
 }
 
-Hosts.propTypes = {
+Services.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
-      hostGroupId: PropTypes.string,
+      hostname: PropTypes.string,
     }).isRequired,
   }).isRequired,
 };
 
-export default Hosts;
+export default Services;

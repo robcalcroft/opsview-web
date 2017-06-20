@@ -85,6 +85,7 @@ module.exports = {
     // `bundle.js` file
     new HtmlWebpackPlugin({
       template: './src/index.ejs',
+      favicon: './src/assets/favicon.ico',
       title: 'Opsview Web',
     }),
     extractSassAndCss,

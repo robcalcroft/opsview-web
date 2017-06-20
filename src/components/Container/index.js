@@ -18,10 +18,7 @@ const Container = ({ children }) => (
 );
 
 Container.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.oneOfType([
-    PropTypes.node,
-    PropTypes.func,
-  ])).isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 export default Container;

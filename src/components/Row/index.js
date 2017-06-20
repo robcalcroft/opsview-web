@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { row } from './Row.scss';
 
 const Row = ({ children }) => (
-  <div className={row}>{children}</div>
+  <div className={row} data-component-name="Row">{children}</div>
 );
 
 Row.propTypes = {

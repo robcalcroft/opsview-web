@@ -14,9 +14,6 @@ $padding: 0.75rem;
   &:hover {
     background-color: darken($opsview-light-grey, 2.5%);
   }
-  &:active, &:focus {
-    outline: 0.25rem solid lighten($opsview-brand-colour, 7.5%);
-  }
   &:first-child {
     margin-top: 0rem;
     margin-bottom: $margin;

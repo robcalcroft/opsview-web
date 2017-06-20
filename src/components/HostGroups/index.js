@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { requestOpsview } from '../../constants/utilities';
 import Pill from '../Pill';
 import Loader from '../Loader';
-import Button from '../Button';
+import ListHeader from '../ListHeader';
 import Dial from '../Dial';
 import Row from '../Row';
 import styles from './HostGroups.scss';
@@ -206,10 +206,13 @@ class HostGroups extends Component {
 
     return (
       <div data-component-name="HostGroups" style={{ height: '100%' }}>
-        <div className={styles.hostgroup__header}>
-          <b style={{ fontSize: '150%' }}>Hostgroups</b>
-          <Button onClick={this.refreshHostGroups}>Refresh</Button>
-        </div>
+        <ListHeader
+          title="Hostgroups"
+          buttons={[{
+            label: 'Refresh',
+            props: { onClick: this.refreshHosts },
+          }]}
+        />
         {loading ? <Loader /> : data.map(this.renderHostGroup)}
       </div>
     );

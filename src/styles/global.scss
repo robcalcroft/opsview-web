@@ -15,6 +15,9 @@ a {
   &:hover {
     color: $opsview-blue;
   }
+  &:active, &:focus {
+    outline: 0.25rem solid lighten($opsview-brand-colour, 7.5%);
+  }
 }
 
 /* Bold text */
