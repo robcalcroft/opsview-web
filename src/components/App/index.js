@@ -24,10 +24,8 @@ export default () => (
         <ProtectedRoute exact path="/hostgroup" component={HostGroups} />
         <ProtectedRoute path="/hostgroup/:parentId" component={HostGroups} />
 
-        <ProtectedRoute exact path="/host" component={Hosts} />
         <ProtectedRoute path="/host/:hostGroupId" component={Hosts} />
 
-        <ProtectedRoute exact path="/service" component={Services} />
         <ProtectedRoute path="/service/:hostname" component={Services} />
 
         <PublicRoute path="*" component={Lost} />

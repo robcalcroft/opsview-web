@@ -32,3 +32,10 @@ input, textarea {
     outline: 3px solid $opsview-amber;
   }
 }
+
+a.focusAndActive {
+  display: block;
+  &:active, &:focus {
+    outline: 0.25rem solid lighten($opsview-brand-colour, 7.5%);
+  }
+}

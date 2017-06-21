@@ -5,6 +5,7 @@ import Loader from '../Loader';
 import Row from '../Row';
 import ListHeader from '../ListHeader';
 import styles from './Hosts.scss';
+import global from '../../styles/global.scss';
 import { requestOpsview } from '../../constants/utilities';
 
 class Hosts extends Component {
@@ -75,7 +76,7 @@ class Hosts extends Component {
 
   renderHost(row) { // eslint-disable-line class-methods-use-this
     return (
-      <Link key={btoa(row.name)} to={`/service/${row.name}`}>
+      <Link key={btoa(row.name)} to={`/service/${row.name}`} className={global.focusAndActive}>
         <Row>
           <div className={styles.host__title}>
             <div>Name</div>

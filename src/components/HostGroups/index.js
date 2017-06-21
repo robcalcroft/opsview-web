@@ -9,6 +9,7 @@ import Dial from '../Dial';
 import Row from '../Row';
 import styles from './HostGroups.scss';
 import colours from '../../styles/colours.scss';
+import global from '../../styles/global.scss';
 
 class HostGroups extends Component {
   constructor(props) {
@@ -172,6 +173,7 @@ class HostGroups extends Component {
 
     return (
       <Link
+        className={global.focusAndActive}
         to={`/${leaf === '1' ? 'host' : 'hostgroup'}/${hostGroupId}`}
         key={hostGroupId}
       >
@@ -210,7 +212,7 @@ class HostGroups extends Component {
           title="Hostgroups"
           buttons={[{
             label: 'Refresh',
-            props: { onClick: this.refreshHosts },
+            props: { onClick: this.refreshHostGroups },
           }]}
         />
         {loading ? <Loader /> : data.map(this.renderHostGroup)}
