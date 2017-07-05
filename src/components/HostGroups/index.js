@@ -25,6 +25,7 @@ class HostGroups extends Component {
     this.state = {
       data: [],
       loading: true,
+      lastUpdated: false,
     };
   }
 
@@ -78,6 +79,7 @@ class HostGroups extends Component {
       done: ({ list }) => this.setState({
         data: list,
         loading: false,
+        lastUpdated: new Date(),
       }),
       fail: response => console.log(response),
     });
@@ -204,7 +206,7 @@ class HostGroups extends Component {
   }
 
   render() {
-    const { data, loading } = this.state;
+    const { data, loading, lastUpdated } = this.state;
 
     return (
       <div data-component-name="HostGroups" style={{ height: '100%' }}>
@@ -213,6 +215,7 @@ class HostGroups extends Component {
           buttons={[{
             label: 'Refresh',
             props: { onClick: this.refreshHostGroups },
+            supplementaryText: `Last updated ${lastUpdated ? lastUpdated.toLocaleString() : 'never'}`,
           }]}
         />
         {loading ? <Loader /> : data.map(this.renderHostGroup)}

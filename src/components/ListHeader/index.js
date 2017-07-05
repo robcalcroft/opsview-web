@@ -7,7 +7,12 @@ const ListHeader = ({ title, buttons }) => (
   <div className={styles.listHeader}>
     <b>{title}</b>
     {buttons.map(button => (
-      <Button key={button.label} {...button.props}>{button.label}</Button>
+      <div className={styles.buttonWrapper} key={button.label}>
+        {button.supplementaryText && (
+          <div className={styles.supplementaryText}>{button.supplementaryText}</div>
+        )}
+        <Button {...button.props}>{button.label}</Button>
+      </div>
     ))}
   </div>
 );
