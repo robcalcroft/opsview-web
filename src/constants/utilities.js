@@ -2,8 +2,8 @@ import qs from 'qs';
 
 export function getCredentials() {
   return {
-    username: localStorage.getItem('opsview_username'),
-    token: localStorage.getItem('opsview_token'),
+    username: (typeof Environment !== 'undefined' && Environment.userName) || localStorage.getItem('opsview_username'),
+    token: (typeof Environment !== 'undefined' && Environment.restToken) || localStorage.getItem('opsview_token'),
   };
 }
 
