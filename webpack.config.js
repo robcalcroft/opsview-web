@@ -91,6 +91,8 @@ module.exports = {
     extractSassAndCss,
   ],
   devServer: {
+    // Used for resolving an error when binding to 0.0.0.0
+    disableHostCheck: true,
     proxy: {
       '/rest': {
         target: process.env.OPSVIEW_URL,
