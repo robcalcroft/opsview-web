@@ -6,7 +6,7 @@
   "repository": "https://github.com/robcalcroft/opsview-web",
   "license": "None",
   "scripts": {
-    "development": "webpack-dev-server --progress --colors",
+    "development": "webpack-dev-server --progress --colors --host 0.0.0.0",
     "production": "NODE_ENV=production webpack -p --progress --colors"
   },
   "dependencies": {
