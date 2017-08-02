@@ -13,6 +13,14 @@
   align-items: inherit;
 }
 
+.buttonWrapperContainer {
+  @extend .buttonWrapper;
+  padding: 0 1rem;
+  &:nth-last-child(1) {
+    padding-right: 0;
+  }
+}
+
 .supplementaryText {
   margin-right: 0.75rem;
 }

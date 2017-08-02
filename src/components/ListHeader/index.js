@@ -6,14 +6,16 @@ import styles from './ListHeader.scss';
 const ListHeader = ({ title, buttons }) => (
   <div className={styles.listHeader}>
     <b>{title}</b>
-    {buttons.map(button => (
-      <div className={styles.buttonWrapper} key={button.label}>
-        {button.supplementaryText && (
-          <div className={styles.supplementaryText}>{button.supplementaryText}</div>
-        )}
-        <Button {...button.props}>{button.label}</Button>
-      </div>
-    ))}
+    <div className={styles.buttonWrapper}>
+      {buttons.map(button => (
+        <div className={styles.buttonWrapperContainer} key={button.label}>
+          {button.supplementaryText && (
+            <div className={styles.supplementaryText}>{button.supplementaryText}</div>
+          )}
+          <Button {...button.props}>{button.label}</Button>
+        </div>
+      ))}
+    </div>
   </div>
 );
 

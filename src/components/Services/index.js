@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Loader from '../Loader';
 import Row from '../Row';
 import ListHeader from '../ListHeader';
+import Pill from '../Pill';
 import styles from './Services.scss';
 import global from '../../styles/global.scss';
 import { requestOpsview } from '../../constants/utilities';
@@ -14,6 +15,7 @@ class Services extends Component {
 
     this.getServiceGroupId = this.getServiceGroupId.bind(this);
     this.getServices = this.getServices.bind(this);
+    this.toggleAutoRefresh = this.toggleAutoRefresh.bind(this);
     this.startClearOldRequestsInterval = this.startClearOldRequestsInterval.bind(this);
     this.refreshServices = this.refreshServices.bind(this);
     this.renderService = this.renderService.bind(this);
@@ -23,16 +25,20 @@ class Services extends Component {
     this.state = {
       data: [],
       loading: true,
+      lastUpdated: false,
+      autoRefresh: false,
     };
   }
 
   componentDidMount() {
     this.getServices(this.getServiceGroupId());
     this.startClearOldRequestsInterval();
+    this.toggleAutoRefresh();
   }
 
   componentWillUnmount() {
     // Ensure we cancel any pending requests when we unmount
+    clearInterval(this.clearOldRequestsInterval);
     this.requests.forEach(request => request.abort && request.abort());
   }
 
@@ -65,12 +71,27 @@ class Services extends Component {
         this.setState({
           data: services,
           loading: false,
+          lastUpdated: new Date(),
         });
       },
       fail: response => console.log(response),
     });
 
     this.requests.push(request);
+  }
+
+  toggleAutoRefresh() {
+    const { autoRefresh } = this.state;
+
+    if (autoRefresh) {
+      clearInterval(this.autoRefreshInterval);
+    } else {
+      this.autoRefreshInterval = setInterval(this.refreshServices, 60000);
+    }
+
+    this.setState({
+      autoRefresh: !autoRefresh,
+    });
   }
 
   startClearOldRequestsInterval() {
@@ -91,13 +112,17 @@ class Services extends Component {
             <div>Name</div>
             <b>{row.name}</b>
           </div>
+          <div style={{ display: 'flex' }}>
+            <Pill state={row.state} />
+            <Pill state={row.unhandled === '1' ? 'unhandled' : 'handled'} />
+          </div>
         </Row>
       </Link>
     );
   }
 
   render() {
-    const { data, loading } = this.state;
+    const { data, loading, lastUpdated, autoRefresh } = this.state;
 
     return (
       <div data-component-name="Service" style={{ height: '100%' }}>
@@ -106,6 +131,10 @@ class Services extends Component {
           buttons={[{
             label: 'Refresh',
             props: { onClick: this.refreshServices },
+            supplementaryText: `Last updated ${lastUpdated ? lastUpdated.toLocaleString() : 'never'}`,
+          }, {
+            label: `${autoRefresh ? 'Disable' : 'Enable'} Auto Refresh`,
+            props: { onClick: this.toggleAutoRefresh },
           }]}
         />
         {loading ? <Loader /> : data.map(this.renderService)}

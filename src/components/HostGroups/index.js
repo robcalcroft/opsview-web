@@ -16,6 +16,7 @@ class HostGroups extends Component {
     super(props);
 
     this.getHostGroups = this.getHostGroups.bind(this);
+    this.toggleAutoRefresh = this.toggleAutoRefresh.bind(this);
     this.startClearOldRequestsInterval = this.startClearOldRequestsInterval.bind(this);
     this.refreshHostGroups = this.refreshHostGroups.bind(this);
     this.renderHostGroup = this.renderHostGroup.bind(this);
@@ -26,12 +27,14 @@ class HostGroups extends Component {
       data: [],
       loading: true,
       lastUpdated: false,
+      autoRefresh: false,
     };
   }
 
   componentDidMount() {
     this.getHostGroups(this.getParentId());
     this.startClearOldRequestsInterval();
+    this.toggleAutoRefresh();
   }
 
   // React router doesn't remount when only parameters change in the route. So we listen to when the
@@ -52,6 +55,7 @@ class HostGroups extends Component {
 
   componentWillUnmount() {
     // Ensure we cancel any pending requests when we unmount
+    clearInterval(this.clearOldRequestsInterval);
     this.requests.forEach(request => request.abort && request.abort());
   }
 
@@ -145,6 +149,20 @@ class HostGroups extends Component {
     };
   }
 
+  toggleAutoRefresh() {
+    const { autoRefresh } = this.state;
+
+    if (autoRefresh) {
+      clearInterval(this.autoRefreshInterval);
+    } else {
+      this.autoRefreshInterval = setInterval(this.refreshHostGroups, 60000);
+    }
+
+    this.setState({
+      autoRefresh: !autoRefresh,
+    });
+  }
+
   startClearOldRequestsInterval() {
     this.clearOldRequestsInterval = setInterval(() => {
       this.requests = [];
@@ -206,7 +224,7 @@ class HostGroups extends Component {
   }
 
   render() {
-    const { data, loading, lastUpdated } = this.state;
+    const { data, loading, lastUpdated, autoRefresh } = this.state;
 
     return (
       <div data-component-name="HostGroups" style={{ height: '100%' }}>
@@ -216,6 +234,9 @@ class HostGroups extends Component {
             label: 'Refresh',
             props: { onClick: this.refreshHostGroups },
             supplementaryText: `Last updated ${lastUpdated ? lastUpdated.toLocaleString() : 'never'}`,
+          }, {
+            label: `${autoRefresh ? 'Disable' : 'Enable'} Auto Refresh`,
+            props: { onClick: this.toggleAutoRefresh },
           }]}
         />
         {loading ? <Loader /> : data.map(this.renderHostGroup)}
