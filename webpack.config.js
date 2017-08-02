@@ -10,7 +10,7 @@ const extractSassAndCss = new ExtractTextPlugin({
   disable: !isProduction,
 });
 
-module.exports = {
+const config = {
   // Our mounting file
   entry: './src/index.js',
   output: {
@@ -92,3 +92,13 @@ module.exports = {
     host: '0.0.0.0',
   },
 };
+
+if (process.env.OPSVIEW_URL) {
+  config.devServer.proxy = {
+    '/rest': {
+      target: process.env.OPSVIEW_URL,
+    },
+  };
+}
+
+module.exports = config;
