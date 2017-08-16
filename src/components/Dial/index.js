@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { STATE_COLOURS } from '../../constants/globals';
 
+// This component was first used in the mobile app and was ported across to web
+// it uses SVG circles overlayed to create the effect
 class Dial extends Component {
   renderCircles() {
     const { red, green, yellow, purple, size } = this.props;

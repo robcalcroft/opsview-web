@@ -1,4 +1,5 @@
 import React from 'react';
+// Learn React Router
 import { HashRouter as Router, Route as PublicRoute, Redirect, Switch } from 'react-router-dom';
 import { isLoggedIn } from '../../constants/utilities';
 import { DEFAULT_ROUTE } from '../../constants/globals';
@@ -10,6 +11,7 @@ import Services from '../Services';
 import Login from '../Login';
 import Lost from '../Lost';
 
+// Look at this with a knowledge of React Router
 export default () => (
   <Router>
     <Container>

@@ -1,5 +1,7 @@
 import qs from 'qs';
 
+// Getter for collecting the credentials from local storage, currently
+// synchronous only! Would need a refactor for async
 export function getCredentials() {
   return {
     username: localStorage.getItem('opsview_username'),
@@ -7,11 +9,13 @@ export function getCredentials() {
   };
 }
 
+// Decides if the session is logged in
 export function isLoggedIn() {
   const { username, token } = getCredentials();
   return username && token;
 }
 
+// JSON decoder wrapper that catches any errors and still returns JSON
 export function decodeJSON(jsonString) {
   try {
     return JSON.parse(jsonString);
@@ -22,6 +26,7 @@ export function decodeJSON(jsonString) {
   }
 }
 
+// A core abstraction of XMLHttpRequest akin to Fetch or jQuery ajax
 export function requestCore({
   method = 'GET',
   url = false,
@@ -75,6 +80,7 @@ export function requestCore({
   return xhr;
 }
 
+// An abstract login function to use for the app when you need to login
 export function login({ username = '', password = '', callback = () => {} }) {
   requestCore({
     method: 'POST',
@@ -100,6 +106,7 @@ export function logout() {
   window.location.reload();
 }
 
+// The Opsview abstract XHR wrapper that adds headers on
 export function requestOpsview(options) {
   const { username, token } = getCredentials();
   // Hardcoded url
@@ -148,6 +155,7 @@ export function getStateColour(state) {
   return colours[state];
 }
 
+// Add a query parameter to the URL. Only works with a hash router
 export function addQueryParameter(queryString = '', newQueryParameter = {}) {
   const hash = window.location.hash;
   const query = qs.parse(queryString.replace(/^\?/, ''), { ignoreQueryPrefix: true });
@@ -162,6 +170,7 @@ export function addQueryParameter(queryString = '', newQueryParameter = {}) {
   window.location.hash = newHash;
 }
 
+// Removes query parameter from the URL. Only works with a hash router
 export function removeQueryParameter(queryString, paramToRemove) {
   const hash = window.location.hash;
   const query = qs.parse(queryString.replace(/^\?/, ''), { ignoreQueryPrefix: true });

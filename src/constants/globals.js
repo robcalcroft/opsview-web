@@ -1,3 +1,5 @@
+// Contains all the global constants for the app
+
 export const DEFAULT_ROUTE = '/hostgroup';
 
 // Keep this up to date with styles/colours.scss
